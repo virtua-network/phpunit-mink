@@ -46,6 +46,8 @@ class BrowserConfiguration implements EventSubscriberInterface
 		// Test related.
 		'type' => 'default',
 		'sessionStrategy' => ISessionStrategyFactory::TYPE_ISOLATED,
+		'driver' => 'Selenium2Driver',
+		'shareBrowser' => 'false'
 	);
 
 	/**
@@ -216,6 +218,8 @@ class BrowserConfiguration implements EventSubscriberInterface
 		$this->setBrowserName($parameters['browserName'])->setDesiredCapabilities($parameters['desiredCapabilities']);
 		$this->setBaseUrl($parameters['baseUrl']);
 		$this->setSessionStrategy($parameters['sessionStrategy']);
+		$this->setBrowserDriver($parameters['driver']);
+		$this->setShareBrowser($parameters['shareBrowser']);
 
 		return $this;
 	}
@@ -325,6 +329,66 @@ class BrowserConfiguration implements EventSubscriberInterface
 		return $this->parameters['browserName'];
 	}
 
+	
+	/**
+	* Sets if browser is shared name to browser configuration.
+	*
+	* To be called from TestCase::setUp().
+	*
+	* @param bool $value .
+	*
+	* @return self
+	* 
+	*/
+	public function setShareBrowser($value = false)
+	{
+		$this->parameters['shareBrowser'] = $value;
+	
+		return $this;
+	}
+	
+	
+	/**
+	* Returns if Browser can be shared between to tests suits
+	*
+	* @return string
+	*/
+	public function getShareBrowser()
+	{
+		return $this->parameters['shareBrowser'];
+	}
+	
+	/**
+	* Sets browser Driver to browser configuration.
+	*
+	* To be called from TestCase::setUp().
+	*
+	* @param string $browser_driver Browser Driver.
+	*
+	* @return self
+	* @throws \InvalidArgumentException When browser name isn't a string.
+	*/
+	public function setBrowserDriver($browser_driver)
+	{
+		if ( !is_string($browser_driver) ) {
+			throw new \InvalidArgumentException('Browser Driver must be a string');
+		}
+	
+		$this->parameters['browserDriver'] = $browser_driver;
+	
+		return $this;
+	}
+	
+	
+	/**
+	* Returns Driver name from browser configuration.
+	*
+	* @return string
+	*/
+	public function getDriverName()
+	{
+		return $this->parameters['browserDriver'];
+	}
 	/**
 	 * Sets default browser url to browser configuration.
 	 *

@@ -31,7 +31,7 @@ class SharedSessionStrategy implements ISessionStrategy
 	 *
 	 * @var ISessionStrategy
 	 */
-	private $_originalStrategy;
+	private $_sessionFactory;
 
 	/**
 	 * Reference to created session.
@@ -52,9 +52,9 @@ class SharedSessionStrategy implements ISessionStrategy
 	 *
 	 * @param ISessionStrategy $original_strategy Original session strategy.
 	 */
-	public function __construct(ISessionStrategy $original_strategy)
+	public function __construct(ISessionFactory $session_factory)
 	{
-		$this->_originalStrategy = $original_strategy;
+		$this->_sessionFactory = $session_factory;
 	}
 
 	/**
@@ -97,11 +97,13 @@ class SharedSessionStrategy implements ISessionStrategy
 		}
 
 		if ( $this->_session === null ) {
-			$this->_session = $this->_originalStrategy->session($browser);
+			//$this->_session = $this->_originalStrategy->session($browser);
+			$this->_session = $this->_sessionFactory->createSession($browser);
+			$this->_session->start();
 		}
-		else {
-			$this->_switchToMainWindow();
-		}
+		/*else {
+			//$this->_switchToMainWindow();
+		}*/
 
 		return $this->_session;
 	}
@@ -149,6 +151,7 @@ class SharedSessionStrategy implements ISessionStrategy
 
 		$this->_lastTestFailed = true;
 	}
+	
 
 	/**
 	 * Called, when test case ends.
@@ -161,7 +164,7 @@ class SharedSessionStrategy implements ISessionStrategy
 	{
 		$session = $event->getSession();
 
-		if ( $session !== null && $session->isStarted() ) {
+		if ( $session !== null && $session->isStarted() && !$event->getShareBrowser() ) {
 			$session->stop();
 		}
 	}

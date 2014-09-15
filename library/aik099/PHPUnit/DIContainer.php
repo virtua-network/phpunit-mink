@@ -80,7 +80,7 @@ class DIContainer extends \Pimple implements IApplicationAware
 		});
 
 		$this['shared_session_strategy'] = $this->factory(function ($c) {
-			$session_strategy = new SharedSessionStrategy($c['isolated_session_strategy']);
+			$session_strategy = new SharedSessionStrategy($c['session_factory']);
 			$session_strategy->setEventDispatcher($c['event_dispatcher']);
 
 			return $session_strategy;

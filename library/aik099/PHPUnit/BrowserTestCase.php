@@ -293,11 +293,16 @@ abstract class BrowserTestCase extends \PHPUnit_Framework_TestCase implements IE
 			}
 		}
 		catch ( DriverException $e ) {
-			$message = 'The Selenium Server is not active on host %s at port %s';
-			$this->markTestSkipped(sprintf($message, $browser->getHost(), $browser->getPort()));
+			$message = 'There was a driver exception:  %s';
+			$this->markTestSkipped(sprintf($message, $e->getMessage()));
 		}
 
 		return $this->_session;
+	}
+	
+	public function setSession(Session $session)
+	{
+		$this->_session = $session;
 	}
 
 	/**
@@ -380,7 +385,7 @@ abstract class BrowserTestCase extends \PHPUnit_Framework_TestCase implements IE
 	{
 		$this->_eventDispatcher->dispatch(
 			self::TEST_SUITE_ENDED_EVENT,
-			new TestEvent($this, $this->_session)
+			new TestEvent($this, $this->_session, $this->getBrowser()->getShareBrowser())
 		);
 
 		return $this;

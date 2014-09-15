@@ -33,16 +33,27 @@ class TestEvent extends Event
 	private $_session;
 
 	/**
+	* Session.
+	*
+	* @var Session
+	*/
+	private $_shareBrowser;
+	
+	/**
 	 * Creates test event.
 	 *
 	 * @param BrowserTestCase $test_case Test case.
 	 * @param Session         $session   Session.
 	 */
-	public function __construct(BrowserTestCase $test_case, Session $session = null)
+	public function __construct(BrowserTestCase $test_case, Session $session = null, $shareBrowser = false)
 	{
 		$this->_testCase = $test_case;
 		$this->_session = $session;
+		$this->_shareBrowser = $shareBrowser;
 	}
+	
+
+	
 
 	/**
 	 * Returns test case.
@@ -64,4 +75,13 @@ class TestEvent extends Event
 		return $this->_session;
 	}
 
+	/**
+	* Returns session.
+	*
+	* @return Shared browser
+	*/
+	public function getShareBrowser()
+	{
+		return $this->_shareBrowser;
+	}
 }

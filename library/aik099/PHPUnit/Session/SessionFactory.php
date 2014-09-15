@@ -11,6 +11,12 @@
 namespace aik099\PHPUnit\Session;
 
 
+use Behat\Mink\Driver\SahiDriver;
+
+use Behat\Mink\Driver\Goutte\Client;
+
+use Behat\Mink\Driver\GoutteDriver;
+
 use aik099\PHPUnit\BrowserConfiguration\BrowserConfiguration;
 use Behat\Mink\Driver\DriverInterface;
 use Behat\Mink\Driver\Selenium2Driver;
@@ -51,12 +57,26 @@ class SessionFactory implements ISessionFactory
 
 		// TODO: maybe doesn't work!
 		ini_set('default_socket_timeout', $browser->getTimeout());
-
-		$driver = new Selenium2Driver(
-			$browser_name,
-			$capabilities,
-			'http://' . $browser->getHost() . ':' . $browser->getPort() . '/wd/hub'
-		);
+		
+	
+		switch ($browser->getDriverName()){
+			case 'Selenium2Driver':
+				$driver = new Selenium2Driver (
+					$browser_name,
+					$capabilities,
+					'http://' . $browser->getHost() . ':' . $browser->getPort() . '/wd/hub'
+				);
+				break;
+			case 'GoutteDriver':
+				$driver = new GoutteDriver(new Client());
+				break;
+			case 'SahiDriver':
+				$driver = new SahiDriver($browser_name);
+				break;
+			default:
+				$driver = new GoutteDriver(new Client());	
+				break;
+		}
 
 		return $driver;
 	}
