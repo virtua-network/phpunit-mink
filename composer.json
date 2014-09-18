@@ -1,5 +1,5 @@
 {
-	"name": "aik099/phpunit-mink",
+	"name": "virtua/phpunit-mink",
 	"description": "Library for using Mink in PHPUnit tests. Supports session sharing between tests in a test case.",
 	"keywords": ["PHPUnit", "Selenium", "SauceLabs", "Sauce", "BrowserStack", "Mink", "Tests"],
 	"homepage": "http://github.com/aik099/phpunit-mink",
